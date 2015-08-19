@@ -12,26 +12,30 @@ use Slim\Http\Response;
 
 return [
 
-    'settings.cookieLifetime'    => '20 minutes',
-    'settings.cookiePath'        => '/',
-    'settings.cookieDomain'      => null,
-    'settings.cookieSecure'      => false,
-    'settings.cookieHttpOnly'    => false,
-    'settings.httpVersion'       => '1.1',
-    'settings.responseChunkSize' => 4096,
-    'settings.outputBuffering'   => 'append',
+    // Settings that can be customized by users
+    'settings.cookieLifetime'                    => '20 minutes',
+    'settings.cookiePath'                        => '/',
+    'settings.cookieDomain'                      => null,
+    'settings.cookieSecure'                      => false,
+    'settings.cookieHttpOnly'                    => false,
+    'settings.httpVersion'                       => '1.1',
+    'settings.responseChunkSize'                 => 4096,
+    'settings.outputBuffering'                   => 'append',
+    'settings.determineRouteBeforeAppMiddleware' => false,
 
     'settings' => [
-        'cookieLifetime'    => DI\get('settings.cookieLifetime'),
-        'cookiePath'        => DI\get('settings.cookiePath'),
-        'cookieDomain'      => DI\get('settings.cookieDomain'),
-        'cookieSecure'      => DI\get('settings.cookieSecure'),
-        'cookieHttpOnly'    => DI\get('settings.cookieHttpOnly'),
-        'httpVersion'       => DI\get('settings.httpVersion'),
-        'responseChunkSize' => DI\get('settings.responseChunkSize'),
-        'outputBuffering'   => DI\get('settings.outputBuffering'),
+        'cookieLifetime'                    => DI\get('settings.cookieLifetime'),
+        'cookiePath'                        => DI\get('settings.cookiePath'),
+        'cookieDomain'                      => DI\get('settings.cookieDomain'),
+        'cookieSecure'                      => DI\get('settings.cookieSecure'),
+        'cookieHttpOnly'                    => DI\get('settings.cookieHttpOnly'),
+        'httpVersion'                       => DI\get('settings.httpVersion'),
+        'responseChunkSize'                 => DI\get('settings.responseChunkSize'),
+        'outputBuffering'                   => DI\get('settings.outputBuffering'),
+        'determineRouteBeforeAppMiddleware' => DI\get('settings.determineRouteBeforeAppMiddleware'),
     ],
 
+    // Default Slim services
     'router'            => DI\object('Slim\Router'),
     'errorHandler'      => DI\object('Slim\Handlers\Error'),
     'notFoundHandler'   => DI\object('Slim\Handlers\NotFound'),
@@ -60,6 +64,7 @@ return [
 
     'callableResolver' => DI\object('DI\Bridge\Slim\CallableResolver'),
 
+    // Aliases
     'Interop\Container\ContainerInterface' => DI\get('DI\Container'),
 
 ];

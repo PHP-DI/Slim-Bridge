@@ -31,4 +31,29 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             $phpdiContainer->get($expectedEntry);
         }
     }
+
+    /**
+     * Slim expects some config options to exist.
+     *
+     * @test
+     */
+    public function provides_default_config_options()
+    {
+        $slimDefault = new App;
+        $slimPhpDi = Quickstart::createApplication();
+
+        /** @var \Slim\Container $defaultContainer */
+        $defaultContainer = $slimDefault->getContainer();
+        /** @var \DI\Container $phpdiContainer */
+        $phpdiContainer = $slimPhpDi->getContainer();
+
+        $expectedOptions = $defaultContainer->get('settings');
+        $actualOptions = $phpdiContainer->get('settings');
+
+        foreach ($expectedOptions as $name => $value) {
+            $this->assertArrayHasKey($name, $actualOptions);
+            // Has the same default value
+            $this->assertEquals($value, $actualOptions[$name]);
+        }
+    }
 }

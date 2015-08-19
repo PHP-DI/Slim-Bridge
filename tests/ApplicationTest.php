@@ -3,8 +3,7 @@
 namespace DI\Bridge\Slim\Test;
 
 use DI\Bridge\Slim\Quickstart;
-use Slim\Http\Environment;
-use Slim\Http\Request;
+use DI\Bridge\Slim\Test\Mock\RequestFactory;
 use Slim\Http\Response;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
@@ -20,12 +19,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $app->get('/', function () use (&$called) {
             $called = true;
         });
-        $request = Request::createFromEnvironment(Environment::mock([
-            'SCRIPT_NAME' => 'index.php',
-            'REQUEST_URI' => '/',
-        ]));
-        $response = new Response;
-        $app->callMiddlewareStack($request, $response);
+
+        $app->callMiddlewareStack(RequestFactory::create(), new Response);
         $this->assertTrue($called);
     }
 }

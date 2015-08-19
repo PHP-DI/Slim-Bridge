@@ -3,10 +3,9 @@
 namespace DI\Bridge\Slim\Test;
 
 use DI\Bridge\Slim\Quickstart;
+use DI\Bridge\Slim\Test\Mock\RequestFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Http\Environment;
-use Slim\Http\Request;
 use Slim\Http\Response;
 
 class MiddlewareTest extends \PHPUnit_Framework_TestCase
@@ -24,13 +23,8 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
         });
 
         $app->get('/', function () {});
-        $request = Request::createFromEnvironment(Environment::mock([
-            'SCRIPT_NAME'  => 'index.php',
-            'REQUEST_URI'  => '/',
-            'QUERY_STRING' => 'foo=matt',
-        ]));
-        $response = new Response;
-        $response = $app->callMiddlewareStack($request, $response);
+        $request = RequestFactory::create('/', 'foo=matt');
+        $response = $app->callMiddlewareStack($request, new Response);
         $this->assertEquals('Hello matt', $response->getBody()->__toString());
     }
 }

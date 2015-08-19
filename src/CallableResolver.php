@@ -2,48 +2,28 @@
 
 namespace DI\Bridge\Slim;
 
-use Invoker\InvokerInterface;
 use Slim\Interfaces\CallableResolverInterface;
 
 /**
- * This class invokes middlewares.
+ * Resolve middleware and route callables using PHP-DI.
  */
 class CallableResolver implements CallableResolverInterface
 {
     /**
-     * @var InvokerInterface
+     * @var \Invoker\CallableResolver
      */
-    private $invoker;
+    private $callableResolver;
 
-    /**
-     * @var callable|string
-     */
-    private $callable;
-
-    public function __construct(InvokerInterface $invoker)
+    public function __construct(\Invoker\CallableResolver $callableResolver)
     {
-        $this->invoker = $invoker;
+        $this->callableResolver = $callableResolver;
     }
 
     /**
-     * Receive a string that is to be resolved to a callable
-     *
-     * @param string $toResolve
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    public function setToResolve($toResolve)
+    public function resolve($toResolve)
     {
-        $this->callable = $toResolve;
-    }
-
-    /**
-     * Invoke the resolved callable.
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function __invoke()
-    {
-        return $this->invoker->call($this->callable, func_get_args());
+        return $this->callableResolver->resolve($toResolve);
     }
 }

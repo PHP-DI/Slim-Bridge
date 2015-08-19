@@ -48,7 +48,7 @@ return [
         return $response->withProtocolVersion($c->get('settings')['httpVersion']);
     })->scope(Scope::SINGLETON),
 
-    'foundHandler'      => DI\object('DI\Bridge\Slim\ControllerInvoker')
+    'foundHandler'         => DI\object('DI\Bridge\Slim\ControllerInvoker')
         ->constructor(DI\get('foundHandler.invoker')),
     'foundHandler.invoker' => function (ContainerInterface $c) {
         $resolvers = [
@@ -58,10 +58,8 @@ return [
         return new Invoker(new ResolverChain($resolvers), $c);
     },
 
-    'callableResolver' => DI\object('DI\Bridge\Slim\CallableResolver')
-        ->constructor(DI\get('callableResolver.invoker'))
-        ->scope(Scope::SINGLETON),
-    'callableResolver.invoker' => DI\object('Invoker\Invoker')
-        ->constructor(DI\get('Invoker\ParameterResolver\NumericArrayResolver'), DI\get('Interop\Container\ContainerInterface')),
+    'callableResolver' => DI\object('DI\Bridge\Slim\CallableResolver'),
+
+    'Interop\Container\ContainerInterface' => DI\get('DI\Container'),
 
 ];

@@ -9,7 +9,7 @@ use Slim\Http\Environment;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class RouteTest extends \PHPUnit_Framework_TestCase
+class RoutingTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -21,14 +21,14 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         // Response and request and inversed to check that they are correctly injected by name
         $app->get('/', function (ResponseInterface $response, ServerRequestInterface $request) {
             $response->getBody()->write('Hello ' . $request->getQueryParams()['foo']);
+            return $response;
         });
         $request = Request::createFromEnvironment(Environment::mock([
             'SCRIPT_NAME'  => 'index.php',
             'REQUEST_URI'  => '/',
             'QUERY_STRING' => 'foo=matt',
         ]));
-        $response = new Response;
-        $response = $app->callMiddlewareStack($request, $response);
+        $response = $app->callMiddlewareStack($request, new Response);
         $this->assertEquals('Hello matt', $response->getBody()->__toString());
     }
 
@@ -41,13 +41,29 @@ class RouteTest extends \PHPUnit_Framework_TestCase
 
         $app->get('/{name}', function ($name, $response) {
             $response->getBody()->write('Hello ' . $name);
+            return $response;
         });
         $request = Request::createFromEnvironment(Environment::mock([
             'SCRIPT_NAME'  => 'index.php',
             'REQUEST_URI'  => '/matt',
         ]));
-        $response = new Response;
-        $response = $app->callMiddlewareStack($request, $response);
+        $response = $app->callMiddlewareStack($request, new Response);
         $this->assertEquals('Hello matt', $response->getBody()->__toString());
+    }
+
+    /**
+     * @test
+     */
+    public function resolve_controller_from_container()
+    {
+        $app = Quickstart::createApplication();
+
+        $app->get('/', ['DI\Bridge\Slim\Test\Fixture\UserController', 'dashboard']);
+        $request = Request::createFromEnvironment(Environment::mock([
+            'SCRIPT_NAME'  => 'index.php',
+            'REQUEST_URI'  => '/',
+        ]));
+        $response = $app->callMiddlewareStack($request, new Response);
+        $this->assertEquals('Hello world!', $response->getBody()->__toString());
     }
 }

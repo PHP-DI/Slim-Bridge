@@ -3,6 +3,7 @@
 namespace DI\Bridge\Slim\Test;
 
 use DI\Bridge\Slim\Quickstart;
+use DI\Bridge\Slim\Test\Fixture\UserController;
 use DI\Bridge\Slim\Test\Mock\RequestFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -47,7 +48,7 @@ class RoutingTest extends \PHPUnit_Framework_TestCase
     public function resolve_controller_from_container()
     {
         $app = Quickstart::createApplication();
-        $app->get('/', ['DI\Bridge\Slim\Test\Fixture\UserController', 'dashboard']);
+        $app->get('/', [UserController::class, 'dashboard']);
 
         $response = $app->callMiddlewareStack(RequestFactory::create(), new Response);
         $this->assertEquals('Hello world!', $response->getBody()->__toString());

@@ -1,5 +1,8 @@
 <?php
 
+use DI\Bridge\Slim\CallableResolver;
+use DI\Bridge\Slim\ControllerInvoker;
+use DI\Container;
 use DI\Scope;
 use Interop\Container\ContainerInterface;
 use Invoker\Invoker;
@@ -36,11 +39,11 @@ return [
     ],
 
     // Default Slim services
-    'router'            => DI\object('Slim\Router'),
-    'errorHandler'      => DI\object('Slim\Handlers\Error'),
-    'notFoundHandler'   => DI\object('Slim\Handlers\NotFound'),
-    'notAllowedHandler' => DI\object('Slim\Handlers\NotAllowed'),
-    'environment'       => DI\object('Slim\Http\Environment')
+    'router'            => DI\object(Slim\Router::class),
+    'errorHandler'      => DI\object(Slim\Handlers\Error::class),
+    'notFoundHandler'   => DI\object(Slim\Handlers\NotFound::class),
+    'notAllowedHandler' => DI\object(Slim\Handlers\NotAllowed::class),
+    'environment'       => DI\object(Slim\Http\Environment::class)
         ->constructor($_SERVER),
 
     'request' => DI\factory(function (ContainerInterface $c) {
@@ -52,7 +55,7 @@ return [
         return $response->withProtocolVersion($c->get('settings')['httpVersion']);
     })->scope(Scope::SINGLETON),
 
-    'foundHandler'         => DI\object('DI\Bridge\Slim\ControllerInvoker')
+    'foundHandler'         => DI\object(ControllerInvoker::class)
         ->constructor(DI\get('foundHandler.invoker')),
     'foundHandler.invoker' => function (ContainerInterface $c) {
         $resolvers = [
@@ -62,9 +65,9 @@ return [
         return new Invoker(new ResolverChain($resolvers), $c);
     },
 
-    'callableResolver' => DI\object('DI\Bridge\Slim\CallableResolver'),
+    'callableResolver' => DI\object(CallableResolver::class),
 
     // Aliases
-    'Interop\Container\ContainerInterface' => DI\get('DI\Container'),
+    ContainerInterface::class => DI\get(Container::class),
 
 ];

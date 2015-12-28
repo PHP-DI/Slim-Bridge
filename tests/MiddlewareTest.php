@@ -16,15 +16,14 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
     public function invokes_closure_middleware()
     {
         $app = Quickstart::createApplication();
-
-        $app->addMiddleware(function (ServerRequestInterface $request, ResponseInterface $response, callable $next) {
+        $app->add(function (ServerRequestInterface $request, ResponseInterface $response, callable $next) {
             $response->getBody()->write('Hello ' . $request->getQueryParams()['foo']);
             return $response;
         });
-
         $app->get('/', function () {});
-        $request = RequestFactory::create('/', 'foo=matt');
-        $response = $app->callMiddlewareStack($request, new Response);
+
+        $response = $app->callMiddlewareStack(RequestFactory::create('/', 'foo=matt'), new Response);
+
         $this->assertEquals('Hello matt', $response->getBody()->__toString());
     }
 }

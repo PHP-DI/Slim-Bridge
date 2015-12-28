@@ -42,7 +42,8 @@ return [
 
     // Default Slim services
     'router'            => DI\object(Slim\Router::class),
-    'errorHandler'      => DI\object(Slim\Handlers\Error::class),
+    'errorHandler'      => DI\object(Slim\Handlers\Error::class)
+        ->constructor(DI\get('settings.displayErrorDetails')),
     'notFoundHandler'   => DI\object(Slim\Handlers\NotFound::class),
     'notAllowedHandler' => DI\object(Slim\Handlers\NotAllowed::class),
     'environment'       => DI\object(Slim\Http\Environment::class)

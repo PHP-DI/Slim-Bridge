@@ -16,27 +16,27 @@ use Slim\Http\Response;
 return [
 
     // Settings that can be customized by users
-    'settings.httpVersion'                       => '1.1',
-    'settings.responseChunkSize'                 => 4096,
-    'settings.outputBuffering'                   => 'append',
+    'settings.httpVersion' => '1.1',
+    'settings.responseChunkSize' => 4096,
+    'settings.outputBuffering' => 'append',
     'settings.determineRouteBeforeAppMiddleware' => false,
     'settings.displayErrorDetails' => false,
 
     'settings' => [
-        'httpVersion'                       => DI\get('settings.httpVersion'),
-        'responseChunkSize'                 => DI\get('settings.responseChunkSize'),
-        'outputBuffering'                   => DI\get('settings.outputBuffering'),
+        'httpVersion' => DI\get('settings.httpVersion'),
+        'responseChunkSize' => DI\get('settings.responseChunkSize'),
+        'outputBuffering' => DI\get('settings.outputBuffering'),
         'determineRouteBeforeAppMiddleware' => DI\get('settings.determineRouteBeforeAppMiddleware'),
         'displayErrorDetails' => DI\get('settings.displayErrorDetails'),
     ],
 
     // Default Slim services
-    'router'            => DI\object(Slim\Router::class),
-    'errorHandler'      => DI\object(Slim\Handlers\Error::class)
+    'router' => DI\object(Slim\Router::class),
+    'errorHandler' => DI\object(Slim\Handlers\Error::class)
         ->constructor(DI\get('settings.displayErrorDetails')),
-    'notFoundHandler'   => DI\object(Slim\Handlers\NotFound::class),
+    'notFoundHandler' => DI\object(Slim\Handlers\NotFound::class),
     'notAllowedHandler' => DI\object(Slim\Handlers\NotAllowed::class),
-    'environment'       => DI\object(Slim\Http\Environment::class)
+    'environment' => DI\object(Slim\Http\Environment::class)
         ->constructor($_SERVER),
 
     'request' => DI\factory(function (ContainerInterface $c) {
@@ -48,7 +48,7 @@ return [
         return $response->withProtocolVersion($c->get('settings')['httpVersion']);
     })->scope(Scope::SINGLETON),
 
-    'foundHandler'         => DI\object(ControllerInvoker::class)
+    'foundHandler' => DI\object(ControllerInvoker::class)
         ->constructor(DI\get('foundHandler.invoker')),
     'foundHandler.invoker' => function (ContainerInterface $c) {
         $resolvers = [

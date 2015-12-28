@@ -16,11 +16,6 @@ use Slim\Http\Response;
 return [
 
     // Settings that can be customized by users
-    'settings.cookieLifetime'                    => '20 minutes',
-    'settings.cookiePath'                        => '/',
-    'settings.cookieDomain'                      => null,
-    'settings.cookieSecure'                      => false,
-    'settings.cookieHttpOnly'                    => false,
     'settings.httpVersion'                       => '1.1',
     'settings.responseChunkSize'                 => 4096,
     'settings.outputBuffering'                   => 'append',
@@ -28,11 +23,6 @@ return [
     'settings.displayErrorDetails' => false,
 
     'settings' => [
-        'cookieLifetime'                    => DI\get('settings.cookieLifetime'),
-        'cookiePath'                        => DI\get('settings.cookiePath'),
-        'cookieDomain'                      => DI\get('settings.cookieDomain'),
-        'cookieSecure'                      => DI\get('settings.cookieSecure'),
-        'cookieHttpOnly'                    => DI\get('settings.cookieHttpOnly'),
         'httpVersion'                       => DI\get('settings.httpVersion'),
         'responseChunkSize'                 => DI\get('settings.responseChunkSize'),
         'outputBuffering'                   => DI\get('settings.outputBuffering'),

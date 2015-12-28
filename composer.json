@@ -15,9 +15,8 @@
     },
     "require": {
         "php": ">=5.5",
-        "php-di/php-di": "~5.0",
-        "php-di/invoker": "dev-separate_resolver as 1.99.99",
-        "slim/slim": "3.x-dev@dev"
+        "php-di/php-di": "~5.2",
+        "slim/slim": "~3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.5"

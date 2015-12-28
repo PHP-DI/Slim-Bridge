@@ -12,6 +12,9 @@ use Invoker\ParameterResolver\ResolverChain;
 use Slim\Http\Headers;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use function DI\factory;
+use function DI\get;
+use function DI\object;
 
 return [
 
@@ -23,33 +26,33 @@ return [
     'settings.displayErrorDetails' => false,
 
     'settings' => [
-        'httpVersion' => DI\get('settings.httpVersion'),
-        'responseChunkSize' => DI\get('settings.responseChunkSize'),
-        'outputBuffering' => DI\get('settings.outputBuffering'),
-        'determineRouteBeforeAppMiddleware' => DI\get('settings.determineRouteBeforeAppMiddleware'),
-        'displayErrorDetails' => DI\get('settings.displayErrorDetails'),
+        'httpVersion' => get('settings.httpVersion'),
+        'responseChunkSize' => get('settings.responseChunkSize'),
+        'outputBuffering' => get('settings.outputBuffering'),
+        'determineRouteBeforeAppMiddleware' => get('settings.determineRouteBeforeAppMiddleware'),
+        'displayErrorDetails' => get('settings.displayErrorDetails'),
     ],
 
     // Default Slim services
-    'router' => DI\object(Slim\Router::class),
-    'errorHandler' => DI\object(Slim\Handlers\Error::class)
-        ->constructor(DI\get('settings.displayErrorDetails')),
-    'notFoundHandler' => DI\object(Slim\Handlers\NotFound::class),
-    'notAllowedHandler' => DI\object(Slim\Handlers\NotAllowed::class),
-    'environment' => DI\object(Slim\Http\Environment::class)
+    'router' => object(Slim\Router::class),
+    'errorHandler' => object(Slim\Handlers\Error::class)
+        ->constructor(get('settings.displayErrorDetails')),
+    'notFoundHandler' => object(Slim\Handlers\NotFound::class),
+    'notAllowedHandler' => object(Slim\Handlers\NotAllowed::class),
+    'environment' => object(Slim\Http\Environment::class)
         ->constructor($_SERVER),
 
-    'request' => DI\factory(function (ContainerInterface $c) {
+    'request' => factory(function (ContainerInterface $c) {
         return Request::createFromEnvironment($c->get('environment'));
     })->scope(Scope::SINGLETON),
-    'response' => DI\factory(function (ContainerInterface $c) {
+    'response' => factory(function (ContainerInterface $c) {
         $headers = new Headers(['Content-Type' => 'text/html; charset=UTF-8']);
         $response = new Response(200, $headers);
         return $response->withProtocolVersion($c->get('settings')['httpVersion']);
     })->scope(Scope::SINGLETON),
 
-    'foundHandler' => DI\object(ControllerInvoker::class)
-        ->constructor(DI\get('foundHandler.invoker')),
+    'foundHandler' => object(ControllerInvoker::class)
+        ->constructor(get('foundHandler.invoker')),
     'foundHandler.invoker' => function (ContainerInterface $c) {
         $resolvers = [
             new AssociativeArrayResolver,
@@ -58,9 +61,9 @@ return [
         return new Invoker(new ResolverChain($resolvers), $c);
     },
 
-    'callableResolver' => DI\object(CallableResolver::class),
+    'callableResolver' => object(CallableResolver::class),
 
     // Aliases
-    ContainerInterface::class => DI\get(Container::class),
+    ContainerInterface::class => get(Container::class),
 
 ];

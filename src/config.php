@@ -25,6 +25,7 @@ return [
     'settings.responseChunkSize'                 => 4096,
     'settings.outputBuffering'                   => 'append',
     'settings.determineRouteBeforeAppMiddleware' => false,
+    'settings.displayErrorDetails' => false,
 
     'settings' => [
         'cookieLifetime'                    => DI\get('settings.cookieLifetime'),
@@ -36,6 +37,7 @@ return [
         'responseChunkSize'                 => DI\get('settings.responseChunkSize'),
         'outputBuffering'                   => DI\get('settings.outputBuffering'),
         'determineRouteBeforeAppMiddleware' => DI\get('settings.determineRouteBeforeAppMiddleware'),
+        'displayErrorDetails' => DI\get('settings.displayErrorDetails'),
     ],
 
     // Default Slim services

@@ -52,7 +52,7 @@ return [
         return Request::createFromEnvironment($c->get('environment'));
     })->scope(Scope::SINGLETON),
     'response' => DI\factory(function (ContainerInterface $c) {
-        $headers = new Headers(['Content-Type' => 'text/html']);
+        $headers = new Headers(['Content-Type' => 'text/html; charset=UTF-8']);
         $response = new Response(200, $headers);
         return $response->withProtocolVersion($c->get('settings')['httpVersion']);
     })->scope(Scope::SINGLETON),

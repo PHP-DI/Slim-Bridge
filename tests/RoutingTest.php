@@ -16,7 +16,7 @@ class RoutingTest extends \PHPUnit_Framework_TestCase
      */
     public function injects_request_and_response()
     {
-        $app = Quickstart::createApplication();
+        $app = Quickstart::web();
         // Response and request and inversed to check that they are correctly injected by name
         $app->get('/', function (ResponseInterface $response, ServerRequestInterface $request) {
             $response->getBody()->write('Hello ' . $request->getQueryParams()['foo']);
@@ -32,7 +32,7 @@ class RoutingTest extends \PHPUnit_Framework_TestCase
      */
     public function injects_request_path_parameters()
     {
-        $app = Quickstart::createApplication();
+        $app = Quickstart::web();
         $app->get('/{name}', function ($name, $response) {
             $response->getBody()->write('Hello ' . $name);
             return $response;
@@ -47,7 +47,7 @@ class RoutingTest extends \PHPUnit_Framework_TestCase
      */
     public function resolve_controller_from_container()
     {
-        $app = Quickstart::createApplication();
+        $app = Quickstart::web();
         $app->get('/', [UserController::class, 'dashboard']);
 
         $response = $app->callMiddlewareStack(RequestFactory::create(), new Response);

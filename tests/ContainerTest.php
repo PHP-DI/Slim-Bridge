@@ -16,7 +16,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function provides_mandatory_container_entries()
     {
         $slimDefault = new App;
-        $slimPhpDi = Quickstart::createApplication();
+        $slimPhpDi = Quickstart::web();
 
         /** @var \Slim\Container $defaultContainer */
         $defaultContainer = $slimDefault->getContainer();
@@ -40,7 +40,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function provides_default_config_options()
     {
         $slimDefault = new App;
-        $slimPhpDi = Quickstart::createApplication();
+        $slimPhpDi = Quickstart::web();
 
         /** @var \Slim\Container $defaultContainer */
         $defaultContainer = $slimDefault->getContainer();

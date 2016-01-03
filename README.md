@@ -7,3 +7,8 @@
 ```
 $ composer require php-di/slim-bridge
 ```
+
+Requirements:
+
+- PHP 5.6 or greater
+- [Puli](http://puli.io)

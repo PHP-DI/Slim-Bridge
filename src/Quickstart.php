@@ -3,7 +3,8 @@
 namespace DI\Bridge\Slim;
 
 use DI\Container;
-use DI\ContainerBuilder;
+use DI\Kernel\Kernel;
+use Silly\Edition\PhpDi\Application;
 use Slim\App;
 
 /**
@@ -12,29 +13,31 @@ use Slim\App;
 class Quickstart
 {
     /**
-     * @return ContainerBuilder
-     */
-    public static function createContainerBuilder()
-    {
-        $containerBuilder = new ContainerBuilder;
-        $containerBuilder->addDefinitions(__DIR__ . '/config.php');
-
-        return $containerBuilder;
-    }
-
-    /**
      * @return Container
      */
-    public static function createContainer()
+    public static function container()
     {
-        return self::createContainerBuilder()->build();
+        $kernel = new Kernel();
+        return $kernel->createContainer();
     }
 
     /**
+     * Create a Slim web application.
+     *
      * @return App
      */
-    public static function createApplication()
+    public static function web()
     {
-        return new App(self::createContainer());
+        return new App(self::container());
+    }
+
+    /**
+     * Create a Silly application for the command line.
+     *
+     * @return Application
+     */
+    public static function cli()
+    {
+        return new Application('UNKNOWN', 'UNKNOWN', self::container());
     }
 }

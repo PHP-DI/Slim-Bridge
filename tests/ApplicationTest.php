@@ -13,7 +13,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function runs()
     {
-        $app = Quickstart::createApplication();
+        $app = Quickstart::web();
 
         $called = false;
         $app->get('/', function () use (&$called) {

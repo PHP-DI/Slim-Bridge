@@ -15,7 +15,7 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     public function invokes_closure_middleware()
     {
-        $app = Quickstart::createApplication();
+        $app = Quickstart::web();
         $app->add(function (ServerRequestInterface $request, ResponseInterface $response, callable $next) {
             $response->getBody()->write('Hello ' . $request->getQueryParams()['foo']);
             return $response;

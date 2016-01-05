@@ -39,8 +39,9 @@ return [
         ->constructor(get('settings.displayErrorDetails')),
     'notFoundHandler' => object(Slim\Handlers\NotFound::class),
     'notAllowedHandler' => object(Slim\Handlers\NotAllowed::class),
-    'environment' => object(Slim\Http\Environment::class)
-        ->constructor($_SERVER),
+    'environment' => function () {
+        return new Slim\Http\Environment($_SERVER);
+    },
 
     'request' => factory(function (ContainerInterface $c) {
         return Request::createFromEnvironment($c->get('environment'));

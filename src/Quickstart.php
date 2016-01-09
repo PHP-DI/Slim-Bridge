@@ -4,7 +4,7 @@ namespace DI\Bridge\Slim;
 
 use DI\Container;
 use DI\Kernel\Kernel;
-use Silly\Edition\PhpDi\Application;
+use Silly\Application;
 use Slim\App;
 
 /**
@@ -38,6 +38,8 @@ class Quickstart
      */
     public static function cli()
     {
-        return new Application('UNKNOWN', 'UNKNOWN', self::container());
+        $app = new Application('UNKNOWN', 'UNKNOWN', self::container());
+        $app->useContainer(self::container(), true, true);
+        return $app;
     }
 }

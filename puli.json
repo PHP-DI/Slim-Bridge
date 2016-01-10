@@ -4,13 +4,6 @@
     "path-mappings": {
         "/slim": "res/"
     },
-    "bindings": {
-        "ad65021e-e956-4517-8a37-1209bb49d79f": {
-            "_class": "Puli\\Discovery\\Binding\\ResourceBinding",
-            "query": "/slim/config.php",
-            "type": "php-di/configuration"
-        }
-    },
     "config": {
         "bootstrap-file": "vendor/autoload.php"
     },
@@ -30,10 +23,6 @@
         },
         "mnapoli/silly": {
             "install-path": "vendor/mnapoli/silly",
-            "installer": "composer"
-        },
-        "mnapoli/silly-php-di": {
-            "install-path": "vendor/mnapoli/silly-php-di",
             "installer": "composer"
         },
         "myclabs/deep-copy": {

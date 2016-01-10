@@ -16,7 +16,7 @@
     "require": {
         "php": "~5.6|~7.0",
         "php-di/php-di": "^5.2",
-        "php-di/kernel": "~0.1.1",
+        "php-di/kernel": "~0.2.0",
         "php-di/invoker": "^1.2",
         "slim/slim": "^3.0",
         "mnapoli/silly": "^1.0"

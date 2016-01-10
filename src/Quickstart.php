@@ -17,7 +17,7 @@ class Quickstart
      */
     public static function container()
     {
-        $kernel = new Kernel();
+        $kernel = new Kernel(['slim']);
         return $kernel->createContainer();
     }
 

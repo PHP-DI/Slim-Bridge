@@ -88,7 +88,7 @@ You can inject services by type-hinting them:
 
 ```php
 $app->get('/', function (ResponseInterface $response, Twig $twig) {
-    return $twig->renderResponse($response, 'home.twig');
+    return $twig->render($response, 'home.twig');
 });
 ```
 
@@ -153,3 +153,5 @@ $app = new class() extends \DI\Bridge\Slim\App {
     }
 };
 ```
+
+Have a look at [configuring PHP-DI](http://php-di.org/doc/container-configuration.html) for more details.

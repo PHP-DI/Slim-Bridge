@@ -55,9 +55,9 @@ Or if you are using PHP 7 you can use anonymous classes:
 
 ```php
 $app = new class() extends \DI\Bridge\Slim\App {
-   protected function configureContainer(ContainerBuilder $builder)
-   {
-       $builder->addDefinitions(__DIR__ . 'my-config-file.php');
-   }
+    protected function configureContainer(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions(__DIR__ . 'my-config-file.php');
+    }
 };
 ```

@@ -2,7 +2,7 @@
 
 namespace DI\Bridge\Slim\Test;
 
-use DI\Bridge\Slim\Quickstart;
+use DI\Bridge\Slim\App;
 use DI\Bridge\Slim\Test\Fixture\UserController;
 use DI\Bridge\Slim\Test\Mock\RequestFactory;
 use Psr\Http\Message\ResponseInterface;
@@ -16,7 +16,7 @@ class RoutingTest extends \PHPUnit_Framework_TestCase
      */
     public function injects_request_and_response()
     {
-        $app = Quickstart::createApplication();
+        $app = new App;
         // Response and request and inversed to check that they are correctly injected by name
         $app->get('/', function (ResponseInterface $response, ServerRequestInterface $request) {
             $response->getBody()->write('Hello ' . $request->getQueryParams()['foo']);
@@ -32,7 +32,7 @@ class RoutingTest extends \PHPUnit_Framework_TestCase
      */
     public function injects_request_path_parameters()
     {
-        $app = Quickstart::createApplication();
+        $app = new App;
         $app->get('/{name}', function ($name, $response) {
             $response->getBody()->write('Hello ' . $name);
             return $response;
@@ -47,7 +47,7 @@ class RoutingTest extends \PHPUnit_Framework_TestCase
      */
     public function resolve_controller_from_container()
     {
-        $app = Quickstart::createApplication();
+        $app = new App;
         $app->get('/', [UserController::class, 'dashboard']);
 
         $response = $app->callMiddlewareStack(RequestFactory::create(), new Response);

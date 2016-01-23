@@ -2,7 +2,7 @@
 
 namespace DI\Bridge\Slim\Test;
 
-use DI\Bridge\Slim\Quickstart;
+use DI\Bridge\Slim\App;
 use DI\Bridge\Slim\Test\Mock\RequestFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,7 +15,7 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     public function invokes_closure_middleware()
     {
-        $app = Quickstart::createApplication();
+        $app = new App;
         $app->add(function (ServerRequestInterface $request, ResponseInterface $response, callable $next) {
             $response->getBody()->write('Hello ' . $request->getQueryParams()['foo']);
             return $response;

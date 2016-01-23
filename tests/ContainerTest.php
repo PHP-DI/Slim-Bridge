@@ -2,8 +2,7 @@
 
 namespace DI\Bridge\Slim\Test;
 
-use DI\Bridge\Slim\Quickstart;
-use Slim\App;
+use DI\Bridge\Slim\App;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,8 +14,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function provides_mandatory_container_entries()
     {
-        $slimDefault = new App;
-        $slimPhpDi = Quickstart::createApplication();
+        $slimDefault = new \Slim\App;
+        $slimPhpDi = new App;
 
         /** @var \Slim\Container $defaultContainer */
         $defaultContainer = $slimDefault->getContainer();
@@ -39,8 +38,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function provides_default_config_options()
     {
-        $slimDefault = new App;
-        $slimPhpDi = Quickstart::createApplication();
+        $slimDefault = new \Slim\App;
+        $slimPhpDi = new App;
 
         /** @var \Slim\Container $defaultContainer */
         $defaultContainer = $slimDefault->getContainer();

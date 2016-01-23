@@ -118,7 +118,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/hello/{name}', function (Request $request, Response $response) {
-    $response->getBody()->write("Hello!");
+    $response->getBody()->write('Hello!');
     return $response;
 });
 
@@ -155,3 +155,49 @@ $app = new class() extends \DI\Bridge\Slim\App {
 ```
 
 Have a look at [configuring PHP-DI](http://php-di.org/doc/container-configuration.html) for more details.
+
+### Twig
+
+In order to get you started easily, here is how you can install the Twig extension for Slim:
+
+- install the [Twig-View](https://github.com/slimphp/Twig-View) package:
+
+    ```
+    composer require slim/twig-view
+    ```
+- configure the `Twig` class in PHP-DI (taken from [the package's documentation](https://github.com/slimphp/Twig-View#usage)):
+
+    ```php
+    class MyApp extends \DI\Bridge\Slim\App
+    {
+        protected function configureContainer(ContainerBuilder $builder)
+        {
+            $definitions = [
+            
+                \Slim\Views\Twig::class => function (ContainerInterface $c) {
+                    $twig = new \Slim\Views\Twig('path/to/templates', [
+                        'cache' => 'path/to/cache'
+                    ]);
+                
+                    $twig->addExtension(new \Slim\Views\TwigExtension(
+                        $c->get('router'),
+                        $c->get('request')->getUri()
+                    ));
+                
+                    return $twig;
+                },
+                
+            ];
+            
+            $builder->addDefinitions($definitions);
+        }
+    }
+    ```
+
+You can now inject the service in your controllers and render templates:
+
+```php
+$app->get('/', function ($response, Twig $twig) {
+    return $twig->render($response, 'home.twig');
+});
+```

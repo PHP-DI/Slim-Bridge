@@ -33,6 +33,8 @@ $app->get('/hello/{name}', function (Request $request, Response $response) {
 $app->run();
 ```
 
+You may notice the `DI\Bridge\Slim\App` class is very simple. You can very well create the container yourself and pass it to the constructor of `Slim\App`. Just don't forget to register the [`src/config.php`](src/config.php) file in the container.
+
 ### Configuring PHP-DI
 
 If you want to configure PHP-DI, simply extend the `DI\Bridge\Slim\App` class and override the `configureContainer()` method:

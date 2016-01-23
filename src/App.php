@@ -6,6 +6,9 @@ use DI\ContainerBuilder;
 
 /**
  * Slim application configured with PHP-DI.
+ *
+ * As you can see, this class is very basic and is only useful to get started quickly.
+ * You can also very well *not* use it and build the container manually.
  */
 class App extends \Slim\App
 {

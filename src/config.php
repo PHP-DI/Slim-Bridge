@@ -56,7 +56,9 @@ return [
         ->constructor(get('foundHandler.invoker')),
     'foundHandler.invoker' => function (ContainerInterface $c) {
         $resolvers = [
+            // Inject parameters by name first
             new AssociativeArrayResolver,
+            // Then inject services by type-hints for those that weren't resolved
             new TypeHintContainerResolver($c),
         ];
         return new Invoker(new ResolverChain($resolvers), $c);

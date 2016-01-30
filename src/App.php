@@ -16,6 +16,7 @@ class App extends \Slim\App
     {
         $containerBuilder = new ContainerBuilder;
         $containerBuilder->addDefinitions(__DIR__ . '/config.php');
+        $this->configureContainer($containerBuilder);
         $container = $containerBuilder->build();
 
         parent::__construct($container);

@@ -43,14 +43,14 @@ return [
         return new Slim\Http\Environment($_SERVER);
     },
 
-    'request' => factory(function (ContainerInterface $c) {
+    'request' => function (ContainerInterface $c) {
         return Request::createFromEnvironment($c->get('environment'));
-    })->scope(Scope::SINGLETON),
-    'response' => factory(function (ContainerInterface $c) {
+    },
+    'response' => function (ContainerInterface $c) {
         $headers = new Headers(['Content-Type' => 'text/html; charset=UTF-8']);
         $response = new Response(200, $headers);
         return $response->withProtocolVersion($c->get('settings')['httpVersion']);
-    })->scope(Scope::SINGLETON),
+    },
 
     'foundHandler' => object(ControllerInvoker::class)
         ->constructor(get('foundHandler.invoker')),

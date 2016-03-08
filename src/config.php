@@ -11,7 +11,6 @@ use Invoker\ParameterResolver\ResolverChain;
 use Slim\Http\Headers;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use function DI\factory;
 use function DI\get;
 use function DI\object;
 

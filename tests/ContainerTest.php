@@ -25,7 +25,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $expectedEntries = $defaultContainer->keys();
 
         foreach ($expectedEntries as $expectedEntry) {
-            $this->assertTrue($phpdiContainer->has($expectedEntry));
+            $this->assertTrue($phpdiContainer->has($expectedEntry), "Container entry $expectedEntry is missing");
             // Check that the service is created without exception
             $phpdiContainer->get($expectedEntry);
         }

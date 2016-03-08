@@ -3,7 +3,6 @@
 use DI\Bridge\Slim\CallableResolver;
 use DI\Bridge\Slim\ControllerInvoker;
 use DI\Container;
-use DI\Scope;
 use Interop\Container\ContainerInterface;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
@@ -37,12 +36,13 @@ return [
     'router' => object(Slim\Router::class),
     'errorHandler' => object(Slim\Handlers\Error::class)
         ->constructor(get('settings.displayErrorDetails')),
+    'phpErrorHandler' => object(Slim\Handlers\PhpError::class)
+        ->constructor(get('settings.displayErrorDetails')),
     'notFoundHandler' => object(Slim\Handlers\NotFound::class),
     'notAllowedHandler' => object(Slim\Handlers\NotAllowed::class),
     'environment' => function () {
         return new Slim\Http\Environment($_SERVER);
     },
-
     'request' => function (ContainerInterface $c) {
         return Request::createFromEnvironment($c->get('environment'));
     },
@@ -51,7 +51,6 @@ return [
         $response = new Response(200, $headers);
         return $response->withProtocolVersion($c->get('settings')['httpVersion']);
     },
-
     'foundHandler' => object(ControllerInvoker::class)
         ->constructor(get('foundHandler.invoker')),
     'foundHandler.invoker' => function (ContainerInterface $c) {

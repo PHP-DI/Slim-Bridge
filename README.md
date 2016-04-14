@@ -156,6 +156,20 @@ $app = new class() extends \DI\Bridge\Slim\App {
 
 Have a look at [configuring PHP-DI](http://php-di.org/doc/container-configuration.html) for more details.
 
+### Configuring Slim
+
+```php
+// my-config-file.php
+
+return [
+    'settings.responseChunkSize' => 4096,
+    'settings.outputBuffering' => 'append',
+    'settings.determineRouteBeforeAppMiddleware' => false,
+    'settings.displayErrorDetails' => false,
+    // ...
+];
+```
+
 ### Twig
 
 In order to get you started easily, here is how you can install the Twig extension for Slim:

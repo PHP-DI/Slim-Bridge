@@ -4,6 +4,8 @@ This package configures Slim 3 to work with the [PHP-DI container](http://php-di
 
 [![Build Status](https://travis-ci.org/PHP-DI/Slim-Bridge.svg?branch=master)](https://travis-ci.org/PHP-DI/Slim-Bridge)
 
+The full documentation is here: **http://php-di.org/doc/frameworks/slim.html**
+
 ## Why?
 
 ### PHP-DI as a container
@@ -94,110 +96,6 @@ $app->get('/', function (ResponseInterface $response, Twig $twig) {
 
 > Note: you can only inject services that you can type-hint and that PHP-DI can provide. Type-hint injection is simple, it simply injects the result of `$container->get(/* the type-hinted class */)`.
 
-## Installation
+## Documentation
 
-```
-composer require php-di/slim-bridge
-```
-
-## Usage
-
-Instead of using `Slim\App`, simply use `DI\Bridge\Slim\App`:
-
-```php
-<?php
-require 'vendor/autoload.php';
-
-$app = new \DI\Bridge\Slim\App;
-```
-
-You can then use the application [just like a classic Slim application](http://www.slimframework.com/):
-
-```php
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
-
-$app->get('/hello/{name}', function (Request $request, Response $response) {
-    $response->getBody()->write('Hello!');
-    return $response;
-});
-
-$app->run();
-```
-
-You may notice the `DI\Bridge\Slim\App` class is very simple. You can very well create the container yourself and pass it to the constructor of `Slim\App`. Just don't forget to register the [`src/config.php`](src/config.php) file in the container.
-
-### Configuring PHP-DI
-
-If you want to configure PHP-DI, simply extend the `DI\Bridge\Slim\App` class and override the `configureContainer()` method:
-
-```php
-class MyApp extends \DI\Bridge\Slim\App
-{
-    protected function configureContainer(ContainerBuilder $builder)
-    {
-        $builder->addDefinitions(__DIR__ . 'my-config-file.php');
-    }
-}
-
-$app = new MyApp;
-```
-
-Or if you are using PHP 7 you can use anonymous classes:
-
-```php
-$app = new class() extends \DI\Bridge\Slim\App {
-    protected function configureContainer(ContainerBuilder $builder)
-    {
-        $builder->addDefinitions(__DIR__ . 'my-config-file.php');
-    }
-};
-```
-
-Have a look at [configuring PHP-DI](http://php-di.org/doc/container-configuration.html) for more details.
-
-### Twig
-
-In order to get you started easily, here is how you can install the Twig extension for Slim:
-
-- install the [Twig-View](https://github.com/slimphp/Twig-View) package:
-
-    ```
-    composer require slim/twig-view
-    ```
-- configure the `Twig` class in PHP-DI (taken from [the package's documentation](https://github.com/slimphp/Twig-View#usage)):
-
-    ```php
-    class MyApp extends \DI\Bridge\Slim\App
-    {
-        protected function configureContainer(ContainerBuilder $builder)
-        {
-            $definitions = [
-            
-                \Slim\Views\Twig::class => function (ContainerInterface $c) {
-                    $twig = new \Slim\Views\Twig('path/to/templates', [
-                        'cache' => 'path/to/cache'
-                    ]);
-                
-                    $twig->addExtension(new \Slim\Views\TwigExtension(
-                        $c->get('router'),
-                        $c->get('request')->getUri()
-                    ));
-                
-                    return $twig;
-                },
-                
-            ];
-            
-            $builder->addDefinitions($definitions);
-        }
-    }
-    ```
-
-You can now inject the service in your controllers and render templates:
-
-```php
-$app->get('/', function ($response, Twig $twig) {
-    return $twig->render($response, 'home.twig');
-});
-```
+The documentation can be read here: **http://php-di.org/doc/frameworks/slim.html**

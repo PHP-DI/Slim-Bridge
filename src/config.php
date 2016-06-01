@@ -22,6 +22,8 @@ return [
     'settings.outputBuffering' => 'append',
     'settings.determineRouteBeforeAppMiddleware' => false,
     'settings.displayErrorDetails' => false,
+    'settings.addContentLengthHeader' => true,
+    'settings.routerCacheFile' => false,
 
     'settings' => [
         'httpVersion' => get('settings.httpVersion'),
@@ -29,6 +31,8 @@ return [
         'outputBuffering' => get('settings.outputBuffering'),
         'determineRouteBeforeAppMiddleware' => get('settings.determineRouteBeforeAppMiddleware'),
         'displayErrorDetails' => get('settings.displayErrorDetails'),
+        'addContentLengthHeader' => get('settings.addContentLengthHeader'),
+        'routerCacheFile' => get('settings.routerCacheFile'),
     ],
 
     // Default Slim services

@@ -45,6 +45,36 @@ class RoutingTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function injects_optional_path_parameter()
+    {
+        $app = new App;
+        $app->get('/[{name}]', function ($response, $name = null) {
+            $response->getBody()->write('Hello ' . $name);
+            return $response;
+        });
+
+        $response = $app->callMiddlewareStack(RequestFactory::create('/matt'), new Response);
+        $this->assertEquals('Hello matt', (string) $response->getBody());
+    }
+
+    /**
+     * @test
+     */
+    public function injects_default_value_in_optional_path_parameter()
+    {
+        $app = new App;
+        $app->get('/[{name}]', function ($response, $name = 'john doe') {
+            $response->getBody()->write('Hello ' . $name);
+            return $response;
+        });
+
+        $response = $app->callMiddlewareStack(RequestFactory::create('/'), new Response);
+        $this->assertEquals('Hello john doe', (string) $response->getBody());
+    }
+
+    /**
+     * @test
+     */
     public function resolve_controller_from_container()
     {
         $app = new App;

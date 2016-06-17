@@ -3,6 +3,12 @@
 namespace DI\Bridge\Slim;
 
 use DI\ContainerBuilder;
+use UnexpectedValueException;
+use RuntimeException;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
+
 
 /**
  * Slim application configured with PHP-DI.
@@ -20,6 +26,30 @@ class App extends \Slim\App
         $container = $containerBuilder->build();
 
         parent::__construct($container);
+    }
+
+    public function addMiddlewareDI(callable $callable){
+        if ($this->middlewareLock) {
+            throw new RuntimeException('Middleware can’t be added once the stack is dequeuing');
+        }
+
+        if (is_null($this->stack)) {
+            $this->seedMiddlewareStack();
+        }
+
+        $next = $this->stack->top();
+        $this->stack[] = function (ServerRequestInterface $req, ResponseInterface $res) use ($callable, $next){
+            $result = call_user_func($this->getContainer()->get('foundHandler'),$callable, $req, $res,['next' => $next]);
+            if ($result instanceof ResponseInterface === false) {
+                throw new UnexpectedValueException(
+                    'Middleware must return instance of \Psr\Http\Message\ResponseInterface'
+                );
+            }
+
+            return $result;
+        };
+
+        return $this;
     }
 
     /**

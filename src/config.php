@@ -46,12 +46,12 @@ return [
         return new Slim\Http\Environment($_SERVER);
     },
     'request' => function (ContainerInterface $c) {
-        return Request::createFromEnvironment($c->DI\get('environment'));
+        return Request::createFromEnvironment($c->get('environment'));
     },
     'response' => function (ContainerInterface $c) {
         $headers = new Headers(['Content-Type' => 'text/html; charset=UTF-8']);
         $response = new Response(200, $headers);
-        return $response->withProtocolVersion($c->DI\get('settings')['httpVersion']);
+        return $response->withProtocolVersion($c->get('settings')['httpVersion']);
     },
     'foundHandler' => DI\object(ControllerInvoker::class)
         ->constructor(DI\get('foundHandler.invoker')),

@@ -28,7 +28,7 @@ class App extends \Slim\App
         parent::__construct($container);
     }
 
-    public function addMiddlewareDI(callable $callable){
+    protected function addMiddleware(callable $callable){
         if ($this->middlewareLock) {
             throw new RuntimeException('Middleware can’t be added once the stack is dequeuing');
         }
@@ -50,6 +50,11 @@ class App extends \Slim\App
         };
 
         return $this;
+    }
+
+    public function add($callable)
+    {
+        return $this->addMiddleware($callable);
     }
 
     /**

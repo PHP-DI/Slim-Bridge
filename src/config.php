@@ -35,7 +35,9 @@ return [
     ],
 
     // Default Slim services
-    'router' => DI\object(Slim\Router::class),
+    'router' => DI\object(Slim\Router::class)
+        ->method('setCacheFile', DI\get('settings.routerCacheFile')),
+    Slim\Router::class => DI\get('router'),
     'errorHandler' => DI\object(Slim\Handlers\Error::class)
         ->constructor(DI\get('settings.displayErrorDetails')),
     'phpErrorHandler' => DI\object(Slim\Handlers\PhpError::class)

@@ -9,7 +9,7 @@ class RequestFactory
 {
     public static function create($uri = '/', $queryString = '')
     {
-        return Request::createFromEnvironment(Environment::mock([
+        return Request::createFromGlobals(Environment::mock([
             'SCRIPT_NAME'  => 'index.php',
             'REQUEST_URI'  => $uri,
             'QUERY_STRING' => $queryString,

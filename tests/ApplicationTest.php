@@ -6,7 +6,7 @@ use DI\Bridge\Slim\App;
 use DI\Bridge\Slim\Test\Mock\RequestFactory;
 use Slim\Http\Response;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase
+class ApplicationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
@@ -18,6 +18,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $called = false;
         $app->get('/', function () use (&$called) {
             $called = true;
+            // Route handler must return Response in Slim 4.x
+            return new Response;
         });
 
         $app->callMiddlewareStack(RequestFactory::create(), new Response);

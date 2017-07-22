@@ -12,14 +12,18 @@ use DI\ContainerBuilder;
  */
 class App extends \Slim\App
 {
-    public function __construct()
+    public function __construct(array $settings = [])
     {
         $containerBuilder = new ContainerBuilder;
         $containerBuilder->addDefinitions(__DIR__ . '/config.php');
+        $containerBuilder->addDefinitions($settings);
         $this->configureContainer($containerBuilder);
         $container = $containerBuilder->build();
 
-        parent::__construct($container);
+        parent::__construct($container->get('settings'));
+        $this->setContainer($container);
+        $this->getRouter()->setDefaultInvocationStrategy($container->get('foundHandler'));
+        $this->getRouter()->setCallableResolver($container->get('callableResolver'));
     }
 
     /**

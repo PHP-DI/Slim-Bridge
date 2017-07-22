@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
 
-class MiddlewareTest extends \PHPUnit_Framework_TestCase
+class MiddlewareTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

@@ -23,8 +23,10 @@ return [
     'settings.displayErrorDetails' => false,
     'settings.addContentLengthHeader' => true,
     'settings.routerCacheFile' => false,
+    'settings.debug' => false,
 
     'settings' => [
+        'debug' => DI\get('settings.debug'),
         'httpVersion' => DI\get('settings.httpVersion'),
         'responseChunkSize' => DI\get('settings.responseChunkSize'),
         'outputBuffering' => DI\get('settings.outputBuffering'),

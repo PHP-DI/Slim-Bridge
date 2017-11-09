@@ -20,8 +20,7 @@ class App extends \Slim\App
         $this->configureContainer($containerBuilder);
         $container = $containerBuilder->build();
 
-        parent::__construct($container->get('settings'));
-        $this->setContainer($container);
+        parent::__construct($container->get('settings'), $container);
         $this->getRouter()->setDefaultInvocationStrategy($container->get('foundHandler'));
         $this->getRouter()->setCallableResolver($container->get('callableResolver'));
     }

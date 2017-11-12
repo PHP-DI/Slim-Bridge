@@ -4,11 +4,12 @@ namespace DI\Bridge\Slim\Test;
 
 use DI\Bridge\Slim\App;
 use DI\Bridge\Slim\Test\Mock\RequestFactory;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
 
-class MiddlewareTest extends \PHPUnit_Framework_TestCase
+class MiddlewareTest extends TestCase
 {
     /**
      * @test

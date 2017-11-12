@@ -4,9 +4,10 @@ namespace DI\Bridge\Slim\Test;
 
 use DI\Bridge\Slim\App;
 use DI\Bridge\Slim\Test\Mock\RequestFactory;
+use PHPUnit\Framework\TestCase;
 use Slim\Http\Response;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase
+class ApplicationTest extends TestCase
 {
     /**
      * @test

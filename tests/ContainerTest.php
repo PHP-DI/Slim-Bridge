@@ -3,8 +3,9 @@
 namespace DI\Bridge\Slim\Test;
 
 use DI\Bridge\Slim\App;
+use PHPUnit\Framework\TestCase;
 
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends TestCase
 {
     /**
      * Slim expects some container entries to exist. To check that, we get all entries from the

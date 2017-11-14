@@ -30,7 +30,7 @@ class RoutingTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function injects_request_path_parameters()
+    public function injects_route_placeholder()
     {
         $app = new App;
         $app->get('/{name}', function ($name, $response) {
@@ -45,7 +45,7 @@ class RoutingTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function injects_optional_path_parameter()
+    public function injects_optional_route_placeholder()
     {
         $app = new App;
         $app->get('/[{name}]', function ($response, $name = null) {
@@ -60,7 +60,7 @@ class RoutingTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function injects_default_value_in_optional_path_parameter()
+    public function injects_default_value_in_optional_route_placeholder()
     {
         $app = new App;
         $app->get('/[{name}]', function ($response, $name = 'john doe') {
@@ -70,6 +70,44 @@ class RoutingTest extends \PHPUnit_Framework_TestCase
 
         $response = $app->callMiddlewareStack(RequestFactory::create('/'), new Response);
         $this->assertEquals('Hello john doe', (string) $response->getBody());
+    }
+
+    /**
+     * @test
+     */
+    public function injects_request_attribute()
+    {
+        $app = new App;
+        // Let's add a middleware that adds a request attribute
+        $app->add(function (ServerRequestInterface $request, $response, $next) {
+            return $next($request->withAttribute('name', 'Bob'), $response);
+        });
+        $app->get('/', function ($name, $response) {
+            $response->getBody()->write('Hello ' . $name);
+            return $response;
+        });
+
+        $response = $app->callMiddlewareStack(RequestFactory::create('/'), new Response);
+        $this->assertEquals('Hello Bob', $response->getBody()->__toString());
+    }
+
+    /**
+     * @test
+     */
+    public function injects_route_placeholder_over_request_attribute()
+    {
+        $app = new App;
+        $app->add(function (ServerRequestInterface $request, $response, $next) {
+            return $next($request->withAttribute('name', 'Bob'), $response);
+        });
+        $app->get('/{name}', function ($name, $response) {
+            $response->getBody()->write('Hello ' . $name);
+            return $response;
+        });
+
+        $response = $app->callMiddlewareStack(RequestFactory::create('/matt'), new Response);
+        // The route placeholder has priority over the request attribute
+        $this->assertEquals('Hello matt', (string) $response->getBody());
     }
 
     /**

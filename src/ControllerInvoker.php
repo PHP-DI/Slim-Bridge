@@ -44,6 +44,9 @@ class ControllerInvoker implements InvocationStrategyInterface
         // Inject the route arguments by name
         $parameters += $routeArguments;
 
+        // Inject the attributes defined on the request
+        $parameters += $request->getAttributes();
+
         return $this->invoker->call($callable, $parameters);
     }
 }

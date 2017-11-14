@@ -5,11 +5,12 @@ namespace DI\Bridge\Slim\Test;
 use DI\Bridge\Slim\App;
 use DI\Bridge\Slim\Test\Fixture\UserController;
 use DI\Bridge\Slim\Test\Mock\RequestFactory;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
 
-class RoutingTest extends \PHPUnit_Framework_TestCase
+class RoutingTest extends TestCase
 {
     /**
      * @test

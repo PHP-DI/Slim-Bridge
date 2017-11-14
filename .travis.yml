@@ -18,4 +18,4 @@ before_script:
   - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --prefer-stable -n; fi;
 
 script:
-  - phpunit
+  - vendor/bin/phpunit

@@ -8,7 +8,6 @@ use Slim\Handlers\Error;
 use PHPUnit\Framework\TestCase;
 use DI\Bridge\Slim\Test\Mock\RequestFactory;
 use Slim\Http\Response;
-use Throwable;
 
 class ErrorTest extends TestCase
 {
@@ -32,7 +31,7 @@ class ErrorTest extends TestCase
 
         /** @var Error $error */
         $error = $c->get('errorHandler');
-        $response = $error(RequestFactory::create('/'), new Response(), new TestException());
+        $response = $error(RequestFactory::create('/'), new Response(), new \Exception());
         $reasonPhrase = $response->getReasonPhrase();
         $this->assertEquals('Internal Server Error', $reasonPhrase);
 
@@ -52,10 +51,10 @@ class ErrorTest extends TestCase
         ini_set('error_log', $logFile);
 
         $app = new BridgeApp(
-                [
-                    'settings.displayErrorDetails' => true,
-                    'settings.outputBuffering' => 'append'
-                ]);
+            [
+                'settings.displayErrorDetails' => true,
+                'settings.outputBuffering' => 'append'
+            ]);
         $c = $app->getContainer();
 
         // Sanity checks
@@ -67,33 +66,12 @@ class ErrorTest extends TestCase
         /** @var Error $error */
         $error = $c->get('errorHandler');
 
-        $response = $error(RequestFactory::create('/'), new Response(), new TestException());
+        $response = $error(RequestFactory::create('/'), new Response(), new \Exception());
         $reasonPhrase = $response->getReasonPhrase();
         $this->assertEquals('Internal Server Error', $reasonPhrase);
 
         $log = file_get_contents($logFile);
         $this->assertEmpty($log);
-    }
-}
-
-/**
- * Class TestException
- *
- * Test Exception that starts its own output buffer
- */
-class TestException extends \Exception
-{
-    public function __construct($message = "", $code = 0, Throwable $previous = null)
-    {
-        parent::__construct($message, $code, $previous);
-
-        // the Slim Error handler calls `ob_get_clean()` regardless of any outputBuffering setting:
-        //  'preappend' => $body->write(ob_get_clean() . $output);
-        //  'append' => $body->write($output . ob_get_clean());
-        //  false || anything else => ob_get_clean(); $body->write($output);
-        //
-        // We start our own OB for testing to keep the OB stack clean
-        ob_start();
     }
 }
 

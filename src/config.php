@@ -39,9 +39,9 @@ return [
         ->method('setCacheFile', DI\get('settings.routerCacheFile')),
     Slim\Router::class => DI\get('router'),
     'errorHandler' => DI\object(Slim\Handlers\Error::class)
-        ->constructor(DI\get('settings.displayErrorDetails'), DI\get('settings.outputBuffering')),
+        ->constructor(DI\get('settings.displayErrorDetails')),
     'phpErrorHandler' => DI\object(Slim\Handlers\PhpError::class)
-        ->constructor(DI\get('settings.displayErrorDetails'), DI\get('settings.outputBuffering')),
+        ->constructor(DI\get('settings.displayErrorDetails')),
     'notFoundHandler' => DI\object(Slim\Handlers\NotFound::class),
     'notAllowedHandler' => DI\object(Slim\Handlers\NotAllowed::class),
     'environment' => function () {

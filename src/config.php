@@ -36,6 +36,7 @@ return [
 
     // Default Slim services
     'router' => DI\object(Slim\Router::class)
+        ->method('setContainer', DI\get(Container::class))
         ->method('setCacheFile', DI\get('settings.routerCacheFile')),
     Slim\Router::class => DI\get('router'),
     'errorHandler' => DI\object(Slim\Handlers\Error::class)

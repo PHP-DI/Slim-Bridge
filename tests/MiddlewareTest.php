@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
+use Interop\Container\ContainerInterface;
+
 
 class MiddlewareTest extends TestCase
 {
@@ -27,4 +29,5 @@ class MiddlewareTest extends TestCase
 
         $this->assertEquals('Hello matt', $response->getBody()->__toString());
     }
+
 }

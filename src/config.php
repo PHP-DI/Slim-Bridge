@@ -61,7 +61,7 @@ return [
         return $response->withProtocolVersion($c->get('settings')['httpVersion']);
     },
     'res' => 'response',
-    'foundHandler' => c
+    'foundHandler' => create(ControllerInvoker::class)
         ->constructor(get('foundHandler.invoker')),
     'foundHandler.invoker' => function (ContainerInterface $c) {
         $resolvers = [

@@ -54,12 +54,14 @@ return [
     'request' => function (ContainerInterface $c) {
         return Request::createFromEnvironment($c->get('environment'));
     },
+    'req' => 'request',
     'response' => function (ContainerInterface $c) {
         $headers = new Headers(['Content-Type' => 'text/html; charset=UTF-8']);
         $response = new Response(200, $headers);
         return $response->withProtocolVersion($c->get('settings')['httpVersion']);
     },
-    'foundHandler' => create(ControllerInvoker::class)
+    'res' => 'response',
+    'foundHandler' => c
         ->constructor(get('foundHandler.invoker')),
     'foundHandler.invoker' => function (ContainerInterface $c) {
         $resolvers = [

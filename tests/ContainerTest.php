@@ -4,6 +4,10 @@ namespace DI\Bridge\Slim\Test;
 
 use DI\Bridge\Slim\App;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 class ContainerTest extends TestCase
 {
@@ -55,5 +59,63 @@ class ContainerTest extends TestCase
             // Has the same default value
             $this->assertEquals($value, $actualOptions[$name]);
         }
+    }
+
+    /**
+     * Makes sure Request definitions can be injected.
+     *
+     * @test
+     */
+    public function provides_request_objects()
+    {
+        $slimPhpDi = new App;
+
+        /** @var \DI\Container $phpdiContainer */
+        $phpdiContainer = $slimPhpDi->getContainer();
+
+        $request = $phpdiContainer->get('request');
+        $this->assertNotNull($request);
+        $this->assertInstanceOf(ServerRequestInterface::class, $request);
+        
+        $res = $phpdiContainer->get('req');
+        $this->assertNotNull($res);
+        $this->assertInstanceOf(ServerRequestInterface::class, $res);
+        
+        $request_interface = $phpdiContainer->get(ServerRequestInterface::class);
+        $this->assertNotNull($request_interface);
+        $this->assertInstanceOf(ServerRequestInterface::class, $request_interface);
+
+        $request_slim = $phpdiContainer->get(Request::class);
+        $this->assertNotNull($request_slim);
+        $this->assertInstanceOf(ServerRequestInterface::class, $request_slim);
+    }
+
+    /**
+     * Makes sure Response definitions can be injected.
+     *
+     * @test
+     */
+    public function provides_response_objects()
+    {
+        $slimPhpDi = new App;
+
+        /** @var \DI\Container $phpdiContainer */
+        $phpdiContainer = $slimPhpDi->getContainer();
+
+        $response = $phpdiContainer->get('response');
+        $this->assertNotNull($response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
+        
+        $res = $phpdiContainer->get('res');
+        $this->assertNotNull($res);
+        $this->assertInstanceOf(ResponseInterface::class, $res);
+        
+        $response_interface = $phpdiContainer->get(ResponseInterface::class);
+        $this->assertNotNull($response_interface);
+        $this->assertInstanceOf(ResponseInterface::class, $response_interface);
+
+        $response_slim = $phpdiContainer->get(Response::class);
+        $this->assertNotNull($response_slim);
+        $this->assertInstanceOf(ResponseInterface::class, $response_slim);
     }
 }

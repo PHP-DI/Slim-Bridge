@@ -15,6 +15,8 @@ use Psr\Container\ContainerInterface;
 use Slim\Http\Headers;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 return [
 
@@ -54,13 +56,17 @@ return [
     'request' => function (ContainerInterface $c) {
         return Request::createFromEnvironment($c->get('environment'));
     },
-    'req' => 'request',
+    'req' => DI\get('request'),
+    ServerRequestInterface::class => DI\get('request'),
+    Request::class => DI\get('request'),
     'response' => function (ContainerInterface $c) {
         $headers = new Headers(['Content-Type' => 'text/html; charset=UTF-8']);
         $response = new Response(200, $headers);
         return $response->withProtocolVersion($c->get('settings')['httpVersion']);
     },
-    'res' => 'response',
+    'res' => DI\get('response'),
+    ResponseInterface::class => DI\get('response'),
+    Response::class => DI\get('response'),
     'foundHandler' => create(ControllerInvoker::class)
         ->constructor(get('foundHandler.invoker')),
     'foundHandler.invoker' => function (ContainerInterface $c) {

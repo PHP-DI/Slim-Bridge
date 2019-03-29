@@ -39,6 +39,8 @@ class ControllerInvoker implements InvocationStrategyInterface
         $parameters = [
             'request'  => $request,
             'response' => $response,
+            'req'      => $request,
+            'res'      => $response,
         ];
 
         // Inject the route arguments by name

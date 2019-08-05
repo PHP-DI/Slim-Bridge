@@ -8,7 +8,9 @@ use DI\Bridge\Slim\Test\Mock\RequestFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Http\Response;
+use Slim\Handlers\Strategies\RequestHandler;
+use Slim\Psr7\Request;
+use Slim\Psr7\Response;
 
 class RoutingTest extends TestCase
 {
@@ -24,7 +26,7 @@ class RoutingTest extends TestCase
             return $response;
         });
 
-        $response = $app->callMiddlewareStack(RequestFactory::create('/', 'foo=matt'), new Response);
+        $response = $app->handle(RequestFactory::create('/', ['foo' => 'matt']));
         $this->assertEquals('Hello matt', $response->getBody()->__toString());
     }
 
@@ -39,7 +41,7 @@ class RoutingTest extends TestCase
             return $response;
         });
 
-        $response = $app->callMiddlewareStack(RequestFactory::create('/matt'), new Response);
+        $response = $app->handle(RequestFactory::create('/matt'));
         $this->assertEquals('Hello matt', $response->getBody()->__toString());
     }
 
@@ -54,7 +56,7 @@ class RoutingTest extends TestCase
             return $response;
         });
 
-        $response = $app->callMiddlewareStack(RequestFactory::create('/matt'), new Response);
+        $response = $app->handle(RequestFactory::create('/matt'));
         $this->assertEquals('Hello matt', (string) $response->getBody());
     }
 
@@ -64,12 +66,13 @@ class RoutingTest extends TestCase
     public function injects_default_value_in_optional_route_placeholder()
     {
         $app = new App;
+
         $app->get('/[{name}]', function ($response, $name = 'john doe') {
             $response->getBody()->write('Hello ' . $name);
             return $response;
         });
 
-        $response = $app->callMiddlewareStack(RequestFactory::create('/'), new Response);
+        $response = $app->handle(RequestFactory::create('/'));
         $this->assertEquals('Hello john doe', (string) $response->getBody());
     }
 
@@ -79,17 +82,18 @@ class RoutingTest extends TestCase
     public function injects_request_attribute()
     {
         $app = new App;
-        // Let's add a middleware that adds a request attribute
-        $app->add(function (ServerRequestInterface $request, $response, $next) {
-            return $next($request->withAttribute('name', 'Bob'), $response);
-        });
-        $app->get('/', function ($name, $response) {
-            $response->getBody()->write('Hello ' . $name);
+
+        //todo: move in middleware
+        $request = RequestFactory::create('/');
+        $request = $request->withAttribute('name', 'Bob');
+
+        $app->get('/', function ($name, Request $request, Response $response) {
+            $response->getBody()->write("Hello $name");
             return $response;
         });
 
-        $response = $app->callMiddlewareStack(RequestFactory::create('/'), new Response);
-        $this->assertEquals('Hello Bob', $response->getBody()->__toString());
+        $response = $app->handle($request);
+        $this->assertEquals('Hello Bob', (string) $response->getBody());
     }
 
     /**
@@ -98,15 +102,17 @@ class RoutingTest extends TestCase
     public function injects_route_placeholder_over_request_attribute()
     {
         $app = new App;
-        $app->add(function (ServerRequestInterface $request, $response, $next) {
-            return $next($request->withAttribute('name', 'Bob'), $response);
-        });
+
+        //todo: move in middleware
+        $request = RequestFactory::create('/matt');
+        $request = $request->withAttribute('name', 'Bob');
+
         $app->get('/{name}', function ($name, $response) {
             $response->getBody()->write('Hello ' . $name);
             return $response;
         });
 
-        $response = $app->callMiddlewareStack(RequestFactory::create('/matt'), new Response);
+        $response = $app->handle($request);
         // The route placeholder has priority over the request attribute
         $this->assertEquals('Hello matt', (string) $response->getBody());
     }
@@ -119,7 +125,7 @@ class RoutingTest extends TestCase
         $app = new App;
         $app->get('/', [UserController::class, 'dashboard']);
 
-        $response = $app->callMiddlewareStack(RequestFactory::create(), new Response);
+        $response = $app->handle(RequestFactory::create());
         $this->assertEquals('Hello world!', $response->getBody()->__toString());
     }
 }

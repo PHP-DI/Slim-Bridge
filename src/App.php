@@ -2,30 +2,46 @@
 
 namespace DI\Bridge\Slim;
 
+use DI\ContainerBuilder;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Factory\AppFactory;
 use \Invoker\CallableResolver as InvokerCallableResolver;
+use Slim\Interfaces\CallableResolverInterface;
+use Slim\Interfaces\RouteCollectorInterface;
+use Slim\Interfaces\RouteResolverInterface;
 
 /**
  * Slim application configured with PHP-DI.
  *
  * As you can see, this class is very basic and is only useful to get started quickly.
- * You can also very well *not* use it and build the container manually.
  */
-class App
+class App extends \Slim\App
 {
-    public static function boot(ContainerInterface $container)
-    {
-        AppFactory::setContainer($container);
+    public function __construct(
+        ?ContainerInterface $container = null,
+        ?ResponseFactoryInterface $responseFactory = null,
+        ?CallableResolverInterface $callableResolver = null,
+        ?RouteCollectorInterface $routeCollector = null,
+        ?RouteResolverInterface $routeResolver = null
+    ) {
+        if ($responseFactory == null) {
+            $responseFactory = AppFactory::determineResponseFactory();
+        }
+        if (!$container) {
+            $containerBuilder = new ContainerBuilder();
+            $container = $containerBuilder->build();
+        }
+        parent::__construct($responseFactory, $container, $callableResolver, $routeCollector, $routeResolver);
+
+        // Set resolvers
         $callableResolver = new InvokerCallableResolver($container);
         AppFactory::setCallableResolver(new CallableResolver($callableResolver));
-
-        $app = AppFactory::create();
 
         $resolvers = [
             // Inject parameters by name first
@@ -37,8 +53,6 @@ class App
         ];
 
         $invoker = new Invoker(new ResolverChain($resolvers), $container);
-        $app->getRouteCollector()->setDefaultInvocationStrategy(new ControllerInvoker($invoker));
-
-        return $app;
+        $this->getRouteCollector()->setDefaultInvocationStrategy(new ControllerInvoker($invoker));
     }
 }

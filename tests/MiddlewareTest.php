@@ -5,9 +5,9 @@ namespace DI\Bridge\Slim\Test;
 use DI\Bridge\Slim\App;
 use DI\Bridge\Slim\Test\Mock\RequestFactory;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Slim\Http\Response;
+use Slim\Psr7\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 class MiddlewareTest extends TestCase
 {
@@ -17,14 +17,17 @@ class MiddlewareTest extends TestCase
     public function invokes_closure_middleware()
     {
         $app = new App;
-        $app->add(function (ServerRequestInterface $request, ResponseInterface $response, callable $next) {
+
+        $app->add(function (Request $request, RequestHandler $handler) {
+            $response = new Response();
             $response->getBody()->write('Hello ' . $request->getQueryParams()['foo']);
+
             return $response;
         });
         $app->get('/', function () {});
 
-        $response = $app->callMiddlewareStack(RequestFactory::create('/', 'foo=matt'), new Response);
-
+        $response = $app->handle(RequestFactory::create('/', ['foo' => 'matt']));
+        echo $response->getBody()->__toString();
         $this->assertEquals('Hello matt', $response->getBody()->__toString());
     }
 }

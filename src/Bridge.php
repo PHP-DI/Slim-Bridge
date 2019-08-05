@@ -14,10 +14,10 @@ use Slim\Factory\AppFactory;
 use \Invoker\CallableResolver as InvokerCallableResolver;
 
 /**
- * Slim application configured with PHP-DI.
+ * This factory creates a Slim application correctly configured with PHP-DI.
  *
- * As you can see, this class is very basic and is only useful to get started quickly.
- * You can also very well *not* use it and build the container manually.
+ * To use this, replace `Slim\Factory\AppFactory::create()`
+ * with `DI\Bridge\Slim\Bridge::create()`.
  */
 class Bridge
 {

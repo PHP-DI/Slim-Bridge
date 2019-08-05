@@ -1,18 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DI\Bridge\Slim\Test\Mock;
 
-use Slim\Http\Environment;
-use Slim\Http\Request;
+use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\ServerRequest;
 
 class RequestFactory
 {
-    public static function create($uri = '/', $queryString = '')
+    public static function create($uri = '/', $queryString = ''): ServerRequestInterface
     {
-        return Request::createFromEnvironment(Environment::mock([
-            'SCRIPT_NAME'  => 'index.php',
-            'REQUEST_URI'  => $uri,
-            'QUERY_STRING' => $queryString,
-        ]));
+        parse_str($queryString, $queryParams);
+        return new ServerRequest(
+            [],
+            [],
+            $uri,
+            'GET',
+            'php://temp',
+            [],
+            [],
+            $queryParams
+        );
     }
 }

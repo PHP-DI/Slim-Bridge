@@ -123,9 +123,11 @@ class RoutingTest extends TestCase
     public function resolve_controller_from_container()
     {
         $app = new App;
-        $app->get('/', [UserController::class, 'dashboard']);
+//        $app->get('/', [UserController::class, 'dashboard']);
+        $app->get('/', UserController::class . ':dashboard');
 
-        $response = $app->handle(RequestFactory::create());
+        $response = $app->handle(RequestFactory::create('/'));
+
         $this->assertEquals('Hello world!', $response->getBody()->__toString());
     }
 }

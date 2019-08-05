@@ -27,7 +27,7 @@ class MiddlewareTest extends TestCase
         $app->get('/', function () {});
 
         $response = $app->handle(RequestFactory::create('/', ['foo' => 'matt']));
-        echo $response->getBody()->__toString();
+
         $this->assertEquals('Hello matt', $response->getBody()->__toString());
     }
 }

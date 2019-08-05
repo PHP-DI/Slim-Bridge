@@ -1,5 +1,9 @@
 language: php
 
+notifications:
+  email:
+    on_success: never
+
 php:
   - 7.1
   - 7.2
@@ -9,6 +13,10 @@ matrix:
   include:
     - php: 7.1
       env: dependencies=lowest
+
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 sudo: false
 

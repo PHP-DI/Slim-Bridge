@@ -31,6 +31,14 @@ class Bridge
 
         $app = AppFactory::create();
 
+        $controllerInvoker = self::createControllerInvoker($container);
+        $app->getRouteCollector()->setDefaultInvocationStrategy($controllerInvoker);
+
+        return $app;
+    }
+
+    private static function createControllerInvoker(ContainerInterface $container): ControllerInvoker
+    {
         $resolvers = [
             // Inject parameters by name first
             new AssociativeArrayResolver(),
@@ -41,8 +49,7 @@ class Bridge
         ];
 
         $invoker = new Invoker(new ResolverChain($resolvers), $container);
-        $app->getRouteCollector()->setDefaultInvocationStrategy(new ControllerInvoker($invoker));
 
-        return $app;
+        return new ControllerInvoker($invoker);
     }
 }

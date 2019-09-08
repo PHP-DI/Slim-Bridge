@@ -12,6 +12,7 @@ use Psr\Container\ContainerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use \Invoker\CallableResolver as InvokerCallableResolver;
+use Slim\Interfaces\CallableResolverInterface;
 
 /**
  * This factory creates a Slim application correctly configured with PHP-DI.
@@ -26,8 +27,8 @@ class Bridge
         $container = $container ?: new Container;
 
         $callableResolver = new InvokerCallableResolver($container);
-        AppFactory::setCallableResolver(new CallableResolver($callableResolver));
 
+        $container->set(CallableResolverInterface::class, new CallableResolver($callableResolver));
         $app = AppFactory::createFromContainer($container);
 
         $controllerInvoker = self::createControllerInvoker($container);

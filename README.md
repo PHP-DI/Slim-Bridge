@@ -1,6 +1,6 @@
 # PHP-DI integration with Slim
 
-This package configures Slim 3 to work with the [PHP-DI container](http://php-di.org/).
+This package configures Slim to work with the [PHP-DI container](http://php-di.org/).
 
 [![Build Status](https://travis-ci.org/PHP-DI/Slim-Bridge.svg?branch=master)](https://travis-ci.org/PHP-DI/Slim-Bridge)
 [![](https://img.shields.io/packagist/dt/php-di/slim-bridge.svg)](https://packagist.org/packages/php-di/slim-bridge)

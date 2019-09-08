@@ -18,11 +18,10 @@ class CallableResolver implements CallableResolverInterface
     {
         $this->callableResolver = $callableResolver;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function resolve($toResolve)
+    public function resolve($toResolve): callable
     {
         return $this->callableResolver->resolve($toResolve);
     }

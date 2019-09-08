@@ -25,11 +25,10 @@ class Bridge
     {
         $container = $container ?: new Container;
 
-        AppFactory::setContainer($container);
         $callableResolver = new InvokerCallableResolver($container);
         AppFactory::setCallableResolver(new CallableResolver($callableResolver));
 
-        $app = AppFactory::create();
+        $app = AppFactory::createFromContainer($container);
 
         $controllerInvoker = self::createControllerInvoker($container);
         $app->getRouteCollector()->setDefaultInvocationStrategy($controllerInvoker);

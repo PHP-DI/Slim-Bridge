@@ -118,7 +118,7 @@ class RoutingTest extends TestCase
     public function resolve_controller_from_container()
     {
         $app = Bridge::create();
-        $app->get('/', [UserController::class, 'dashboard']);
+        $app->get('/', UserController::class . ':dashboard');
 
         $response = $app->handle(RequestFactory::create());
         $this->assertEquals('Hello world!', (string) $response->getBody());

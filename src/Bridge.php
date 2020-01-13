@@ -31,6 +31,8 @@ class Bridge
         $container->set(CallableResolverInterface::class, new CallableResolver($callableResolver));
         $app = AppFactory::createFromContainer($container);
 
+        $container->set(App::class, $app);
+
         $controllerInvoker = self::createControllerInvoker($container);
         $app->getRouteCollector()->setDefaultInvocationStrategy($controllerInvoker);
 

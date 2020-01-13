@@ -43,9 +43,6 @@ class ApplicationTest extends TestCase
 
         $app->handle(RequestFactory::create());
 
-        $this->assertSame(
-            $app,
-            $instance
-        );
+        $this->assertSame($app, $instance);
     }
 }

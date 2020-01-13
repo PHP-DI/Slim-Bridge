@@ -5,7 +5,6 @@ namespace DI\Bridge\Slim\Test;
 use DI\Bridge\Slim\Bridge;
 use DI\Bridge\Slim\Test\Mock\RequestFactory;
 use PHPUnit\Framework\TestCase;
-use DI\ContainerBuilder;
 use Slim\App;
 use Psr\Http\Message\ResponseInterface;
 
@@ -37,15 +36,15 @@ class ApplicationTest extends TestCase
 
         $instance = null;
 
-        $app->get('/', function (App $app, ResponseInterface $response) use(&$instance) {
+        $app->get('/', function (App $app, ResponseInterface $response) use (&$instance) {
             $instance = $app;
             return $response;
         });
 
         $app->handle(RequestFactory::create());
 
-        $this->assertInstanceOf(
-            App::class,
+        $this->assertSame(
+            $app,
             $instance
         );
     }

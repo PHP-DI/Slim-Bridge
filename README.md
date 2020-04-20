@@ -87,9 +87,10 @@ As you can see above, the route's URL contains a `name` placeholder. By simply a
 #### Request attribute injection
 
 ```php
-$app->add(function ($request, $response, $next) {
+$app->add(function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
     $request = $request->withAttribute('name', 'Bob');
-    return $next($request, $response);
+    $response = $handler->handle($request);
+    return $response;
 });
 
 $app->get('/', function ($name, ResponseInterface $response) {

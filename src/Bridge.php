@@ -39,7 +39,7 @@ class Bridge
         return $app;
     }
 
-    private static function createControllerInvoker(ContainerInterface $container): ControllerInvoker
+    protected static function createControllerInvoker(ContainerInterface $container): ControllerInvoker
     {
         $resolvers = [
             // Inject parameters by name first

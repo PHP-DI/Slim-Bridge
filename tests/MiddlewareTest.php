@@ -3,6 +3,7 @@
 namespace DI\Bridge\Slim\Test;
 
 use DI\Bridge\Slim\Bridge;
+use DI\Bridge\Slim\Test\Mock\Psr15Middleware;
 use DI\Bridge\Slim\Test\Mock\RequestFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -20,6 +21,20 @@ class MiddlewareTest extends TestCase
         $app->add(function (ServerRequestInterface $request, RequestHandlerInterface $next) {
             return new TextResponse('Hello ' . $request->getQueryParams()['foo']);
         });
+        $app->get('/', function () {});
+
+        $response = $app->handle(RequestFactory::create('/', 'foo=matt'));
+
+        $this->assertEquals('Hello matt', $response->getBody()->__toString());
+    }
+
+    /**
+     * @test
+     */
+    public function invokes_psr15_middleware()
+    {
+        $app = Bridge::create();
+        $app->add(Psr15Middleware::class);
         $app->get('/', function () {});
 
         $response = $app->handle(RequestFactory::create('/', 'foo=matt'));

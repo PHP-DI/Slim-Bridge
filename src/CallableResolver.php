@@ -60,9 +60,9 @@ class CallableResolver implements AdvancedCallableResolverInterface
 
     private function resolvePossibleSignature($toResolve, string $method, string $typeName): callable
     {
-        $toResolve = $this->translateNotation($toResolve);
-
         if (is_string($toResolve)) {
+            $toResolve = $this->translateNotation($toResolve);
+
             try {
                 $callable = $this->callableResolver->resolve([$toResolve, $method]);
 

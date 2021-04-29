@@ -27,9 +27,7 @@ class CallableResolver implements AdvancedCallableResolverInterface
      */
     public function resolve($toResolve): callable
     {
-        $toResolve = $this->translateNotation($toResolve);
-
-        return $this->callableResolver->resolve($toResolve);
+        return $this->callableResolver->resolve($this->translateNotation($toResolve));
     }
 
     /**
@@ -37,8 +35,6 @@ class CallableResolver implements AdvancedCallableResolverInterface
      */
     public function resolveRoute($toResolve): callable
     {
-        $toResolve = $this->translateNotation($toResolve);
-
         return $this->resolvePossibleSignature($toResolve, 'handle', RequestHandlerInterface::class);
     }
 
@@ -47,8 +43,6 @@ class CallableResolver implements AdvancedCallableResolverInterface
      */
     public function resolveMiddleware($toResolve): callable
     {
-        $toResolve = $this->translateNotation($toResolve);
-
         return $this->resolvePossibleSignature($toResolve, 'process', MiddlewareInterface::class);
     }
 
@@ -66,9 +60,11 @@ class CallableResolver implements AdvancedCallableResolverInterface
 
     private function resolvePossibleSignature($toResolve, string $method, string $typeName): callable
     {
+        $toResolve = $this->translateNotation($toResolve);
+
         if (is_string($toResolve)) {
             try {
-                $callable = $this->resolve([$toResolve, $method]);
+                $callable = $this->callableResolver->resolve([$toResolve, $method]);
 
                 if (is_array($callable) && $callable[0] instanceof $typeName) {
                     return $callable;
@@ -78,6 +74,6 @@ class CallableResolver implements AdvancedCallableResolverInterface
             }
         }
 
-        return $this->resolve($toResolve);
+        return $this->callableResolver->resolve($toResolve);
     }
 }

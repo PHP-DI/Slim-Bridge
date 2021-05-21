@@ -123,4 +123,17 @@ class RoutingTest extends TestCase
         $response = $app->handle(RequestFactory::create());
         $this->assertEquals('Hello world!', (string) $response->getBody());
     }
+
+    /**
+     * @test
+     */
+    public function injects_route_placeholders_array_to_resolved_controller_from_container()
+    {
+        $app = Bridge::create();
+        $app->get('/{prefix}/{name}', [UserController::class, 'invite']);
+
+        $response = $app->handle(RequestFactory::create('/dear/slim'));
+        $this->assertEquals('Hello dear slim!', (string) $response->getBody());
+    }
+
 }

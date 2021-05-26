@@ -33,7 +33,7 @@ class Bridge
 
         $container->set(App::class, $app);
 
-        $controllerInvoker = self::createControllerInvoker($container);
+        $controllerInvoker = static::createControllerInvoker($container);
         $app->getRouteCollector()->setDefaultInvocationStrategy($controllerInvoker);
 
         return $app;

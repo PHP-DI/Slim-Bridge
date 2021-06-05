@@ -10,6 +10,7 @@ use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Psr\Container\ContainerInterface;
 use Slim\App;
+use Slim\CallableResolver as SlimCallableResolver;
 use Slim\Factory\AppFactory;
 use \Invoker\CallableResolver as InvokerCallableResolver;
 use Slim\Interfaces\CallableResolverInterface;
@@ -27,8 +28,9 @@ class Bridge
         $container = $container ?: new Container;
 
         $callableResolver = new InvokerCallableResolver($container);
+        $slimCallableResolver = new SlimCallableResolver($container);
 
-        $container->set(CallableResolverInterface::class, new CallableResolver($callableResolver));
+        $container->set(CallableResolverInterface::class, new CallableResolver($callableResolver, $slimCallableResolver));
         $app = AppFactory::createFromContainer($container);
 
         $container->set(App::class, $app);

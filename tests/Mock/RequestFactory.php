@@ -3,7 +3,7 @@
 namespace DI\Bridge\Slim\Test\Mock;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\ServerRequest;
+use Laminas\Diactoros\ServerRequest;
 
 class RequestFactory
 {

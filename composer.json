@@ -15,7 +15,7 @@
     },
     "require": {
         "php": "^7.1 || ^8.0",
-        "php-di/php-di": "^6.0.0",
+        "php-di/php-di": "^6.0|^7.0",
         "php-di/invoker": "^2.0.0",
         "slim/slim": "^4.2.0"
     },

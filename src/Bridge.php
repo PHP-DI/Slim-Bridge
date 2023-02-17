@@ -41,11 +41,11 @@ class Bridge
 
     private static function createControllerInvoker(ContainerInterface $container): ControllerInvoker
     {
-        $resolvers = [
-            // Inject parameters by name first
-            new AssociativeArrayResolver(),
+        $resolvers = [            
             // Then inject services by type-hints for those that weren't resolved
             new TypeHintContainerResolver($container),
+            // Inject parameters by name
+            new AssociativeArrayResolver(),
             // Then fall back on parameters default values for optional route parameters
             new DefaultValueResolver(),
         ];

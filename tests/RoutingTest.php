@@ -47,6 +47,21 @@ class RoutingTest extends TestCase
     /**
      * @test
      */
+    public function injects_route_placeholder_from_request()
+    {
+        $app = Bridge::create();
+        $app->get('/{name}', function ($request, $response) {
+            $response->getBody()->write('Hello ' . $request->getAttribute('name'));
+            return $response;
+        });
+
+        $response = $app->handle(RequestFactory::create('/matt'));
+        $this->assertEquals('Hello matt', (string) $response->getBody());
+    }
+
+    /**
+     * @test
+     */
     public function injects_optional_route_placeholder()
     {
         $app = Bridge::create();

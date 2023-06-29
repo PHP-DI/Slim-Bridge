@@ -36,7 +36,7 @@ class ControllerInvoker implements InvocationStrategyInterface
     ): ResponseInterface {
         // Inject the request and response by parameter name
         $parameters = [
-            'request'  => $request,
+            'request'  => self::injectRouteArguments($request, $routeArguments),
             'response' => $response,
         ];
         // Inject the route arguments by name
@@ -45,5 +45,14 @@ class ControllerInvoker implements InvocationStrategyInterface
         $parameters += $request->getAttributes();
 
         return $this->invoker->call($callable, $parameters);
+    }
+
+    private static function injectRouteArguments(ServerRequestInterface $request, array $routeArguments): ServerRequestInterface
+    {
+        $requestWithArgs = $request;
+        foreach ($routeArguments as $key => $value) {
+            $requestWithArgs = $requestWithArgs->withAttribute($key, $value);
+        }
+        return $requestWithArgs;
     }
 }

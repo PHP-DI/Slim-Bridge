@@ -3,6 +3,7 @@
 namespace DI\Bridge\Slim;
 
 use DI\Container;
+use Invoker\CallableResolver as InvokerCallableResolver;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
@@ -11,7 +12,6 @@ use Invoker\ParameterResolver\ResolverChain;
 use Psr\Container\ContainerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
-use \Invoker\CallableResolver as InvokerCallableResolver;
 use Slim\Interfaces\CallableResolverInterface;
 
 /**
@@ -22,7 +22,7 @@ use Slim\Interfaces\CallableResolverInterface;
  */
 class Bridge
 {
-    public static function create(ContainerInterface $container = null): App
+    public static function create(?ContainerInterface $container = null): App
     {
         $container = $container ?: new Container;
 
@@ -43,11 +43,11 @@ class Bridge
     {
         $resolvers = [
             // Inject parameters by name first
-            new AssociativeArrayResolver(),
+            new AssociativeArrayResolver,
             // Then inject services by type-hints for those that weren't resolved
             new TypeHintContainerResolver($container),
             // Then fall back on parameters default values for optional route parameters
-            new DefaultValueResolver(),
+            new DefaultValueResolver,
         ];
 
         $invoker = new Invoker(new ResolverChain($resolvers), $container);

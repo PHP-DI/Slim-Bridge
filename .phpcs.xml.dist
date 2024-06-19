@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<ruleset>
+    <arg name="basepath" value="."/>
+    <arg name="extensions" value="php"/>
+    <arg name="cache" value=".phpcs-cache"/>
+    <!-- Show sniff names -->
+    <arg value="s"/>
+
+    <file>src</file>
+
+    <rule ref="HardMode"/>
+
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint">
+        <exclude-pattern type="relative">src/CallableResolver.php</exclude-pattern>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint">
+        <exclude-pattern type="relative">src/CallableResolver.php</exclude-pattern>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix">
+        <severity>0</severity>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix">
+        <severity>0</severity>
+    </rule>
+
+</ruleset>

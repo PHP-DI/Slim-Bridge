@@ -130,6 +130,26 @@ class RoutingTest extends TestCase
     /**
      * @test
      */
+    public function prefers_request_attribute_over_route_placeholder_if_configured()
+    {
+        $app = Bridge::create(null, true);
+        $app->add(function (ServerRequestInterface $request, RequestHandlerInterface $next) {
+            return $next->handle($request->withAttribute('name', 'Bob'));
+        });
+        $app->get('/{name}', function ($name, $request, $response) {
+            $response->getBody()->write('Hello ' . $name . ', from ' . $request->getAttribute('name'));
+            return $response;
+        });
+
+        $response = $app->handle(RequestFactory::create('/matt'));
+
+        // The route placeholder does not override the request attribute but the placeholder is still provided to the controller
+        $this->assertEquals('Hello matt, from Bob', (string) $response->getBody());
+    }
+
+    /**
+     * @test
+     */
     public function resolve_controller_from_container()
     {
         $app = Bridge::create();

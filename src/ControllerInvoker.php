@@ -12,9 +12,13 @@ class ControllerInvoker implements InvocationStrategyInterface
     /** @var InvokerInterface */
     private $invoker;
 
-    public function __construct(InvokerInterface $invoker)
+    /** @var bool Whether attributes should override parameters */
+    protected $prioritiseAttributesOverParams;
+
+    public function __construct(InvokerInterface $invoker, bool $prioritiseAttributesOverParams)
     {
         $this->invoker = $invoker;
+        $this->prioritiseAttributesOverParams = $prioritiseAttributesOverParams;
     }
 
     /**
@@ -24,7 +28,6 @@ class ControllerInvoker implements InvocationStrategyInterface
      * @param ServerRequestInterface $request        The request object.
      * @param ResponseInterface      $response       The response object.
      * @param array                  $routeArguments The route's placeholder arguments
-     * @return ResponseInterface|string The response from the callable.
      */
     public function __invoke(
         callable $callable,
@@ -34,7 +37,7 @@ class ControllerInvoker implements InvocationStrategyInterface
     ): ResponseInterface {
         // Inject the request and response by parameter name
         $parameters = [
-            'request'  => self::injectRouteArguments($request, $routeArguments),
+            'request'  => self::injectRouteArguments($request, $routeArguments, $this->prioritiseAttributesOverParams),
             'response' => $response,
         ];
         // Inject the route arguments by name
@@ -42,13 +45,35 @@ class ControllerInvoker implements InvocationStrategyInterface
         // Inject the attributes defined on the request
         $parameters += $request->getAttributes();
 
-        return $this->invoker->call($callable, $parameters);
+        return $this->processResponse($this->invoker->call($callable, $parameters));
     }
 
-    private static function injectRouteArguments(ServerRequestInterface $request, array $routeArguments): ServerRequestInterface
+    /**
+     * Allow for child classes to process the response.
+     *
+     * @param ResponseInterface|string $response The response from the callable.
+     * @return ResponseInterface|string The processed response
+     */
+    protected function processResponse($response)
     {
+        return $response;
+    }
+
+    /**
+     * Inject route arguments into the request.
+     *
+     * @param array                  $routeArguments
+     */
+    protected static function injectRouteArguments(
+        ServerRequestInterface $request,
+        array $routeArguments,
+        bool $prioritiseAttributesOverParams
+    ): ServerRequestInterface {
         $requestWithArgs = $request;
         foreach ($routeArguments as $key => $value) {
+            if ($prioritiseAttributesOverParams && $request->getAttribute($key) !== null) {
+                continue;
+            }
             $requestWithArgs = $requestWithArgs->withAttribute($key, $value);
         }
         return $requestWithArgs;

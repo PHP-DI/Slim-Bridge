@@ -22,8 +22,10 @@ use Slim\Interfaces\CallableResolverInterface;
  */
 class Bridge
 {
-    public static function create(?ContainerInterface $container = null): App
-    {
+    public static function create(
+        ?ContainerInterface $container = null,
+        bool $prioritiseAttributesOverParams = false
+    ): App {
         $container = $container ?: new Container;
 
         $callableResolver = new InvokerCallableResolver($container);
@@ -33,13 +35,16 @@ class Bridge
 
         $container->set(App::class, $app);
 
-        $controllerInvoker = static::createControllerInvoker($container);
+        $controllerInvoker = static::createControllerInvoker($container, $prioritiseAttributesOverParams);
         $app->getRouteCollector()->setDefaultInvocationStrategy($controllerInvoker);
 
         return $app;
     }
 
-    private static function createControllerInvoker(ContainerInterface $container): ControllerInvoker
+    /**
+     * Create an invoker with the default resolvers.
+     */
+    protected static function createInvoker(ContainerInterface $container): Invoker
     {
         $resolvers = [
             // Inject parameters by name first
@@ -50,8 +55,14 @@ class Bridge
             new DefaultValueResolver,
         ];
 
-        $invoker = new Invoker(new ResolverChain($resolvers), $container);
+        return new Invoker(new ResolverChain($resolvers), $container);
+    }
 
-        return new ControllerInvoker($invoker);
+    /**
+     * Create a controller invoker with the default resolvers.
+     */
+    protected static function createControllerInvoker(ContainerInterface $container, bool $prioritiseAttributesOverParams): ControllerInvoker
+    {
+        return new ControllerInvoker(self::createInvoker($container), $prioritiseAttributesOverParams);
     }
 }

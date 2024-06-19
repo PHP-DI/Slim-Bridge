@@ -24,7 +24,6 @@ class ControllerInvoker implements InvocationStrategyInterface
      * @param ServerRequestInterface $request        The request object.
      * @param ResponseInterface      $response       The response object.
      * @param array                  $routeArguments The route's placeholder arguments
-     * @return ResponseInterface|string The response from the callable.
      */
     public function __invoke(
         callable $callable,
@@ -42,10 +41,26 @@ class ControllerInvoker implements InvocationStrategyInterface
         // Inject the attributes defined on the request
         $parameters += $request->getAttributes();
 
-        return $this->invoker->call($callable, $parameters);
+        return $this->processResponse($this->invoker->call($callable, $parameters));
     }
 
-    private static function injectRouteArguments(ServerRequestInterface $request, array $routeArguments): ServerRequestInterface
+    /**
+     * Allow for child classes to process the response.
+     *
+     * @param ResponseInterface|string $response The response from the callable.
+     * @return ResponseInterface|string The processed response
+     */
+    protected function processResponse($response)
+    {
+        return $response;
+    }
+
+    /**
+     * Inject route arguments into the request.
+     *
+     * @param array                  $routeArguments
+     */
+    protected static function injectRouteArguments(ServerRequestInterface $request, array $routeArguments): ServerRequestInterface
     {
         $requestWithArgs = $request;
         foreach ($routeArguments as $key => $value) {

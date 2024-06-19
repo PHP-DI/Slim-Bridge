@@ -39,7 +39,10 @@ class Bridge
         return $app;
     }
 
-    private static function createControllerInvoker(ContainerInterface $container): ControllerInvoker
+    /**
+     * Create an invoker with the default resolvers.
+     */
+    protected static function createInvoker(ContainerInterface $container): Invoker
     {
         $resolvers = [
             // Inject parameters by name first
@@ -50,8 +53,14 @@ class Bridge
             new DefaultValueResolver,
         ];
 
-        $invoker = new Invoker(new ResolverChain($resolvers), $container);
+        return new Invoker(new ResolverChain($resolvers), $container);
+    }
 
-        return new ControllerInvoker($invoker);
+    /**
+     * Create a controller invoker with the default resolvers.
+     */
+    protected static function createControllerInvoker(ContainerInterface $container): ControllerInvoker
+    {
+        return new ControllerInvoker(self::createInvoker($container));
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DI\Bridge\Slim;
 
@@ -9,15 +9,14 @@ use Slim\Interfaces\InvocationStrategyInterface;
 
 class ControllerInvoker implements InvocationStrategyInterface
 {
-    /**
-     * @var InvokerInterface
-     */
+    /** @var InvokerInterface */
     private $invoker;
 
     public function __construct(InvokerInterface $invoker)
     {
         $this->invoker = $invoker;
     }
+
     /**
      * Invoke a route callable.
      *
@@ -25,7 +24,6 @@ class ControllerInvoker implements InvocationStrategyInterface
      * @param ServerRequestInterface $request        The request object.
      * @param ResponseInterface      $response       The response object.
      * @param array                  $routeArguments The route's placeholder arguments
-     *
      * @return ResponseInterface|string The response from the callable.
      */
     public function __invoke(

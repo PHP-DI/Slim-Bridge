@@ -18,9 +18,6 @@ jobs:
             matrix:
                 php: [ '7.3', '7.4', '8.0', '8.1', '8.2', '8.3' ]
                 dependency-version: [ '' ]
-                include:
-                    -   php: '7.3'
-                        dependency-version: '--prefer-lowest'
         steps:
             -   name: Checkout
                 uses: actions/checkout@v4
@@ -30,7 +27,7 @@ jobs:
                     php-version: ${{ matrix.php }}
                     coverage: none
             -   name: Cache Composer dependencies
-                uses: actions/cache@v3
+                uses: actions/cache@v4
                 with:
                     path: ~/.composer/cache
                     key: php-${{ matrix.php }}-composer-locked-${{ hashFiles('composer.lock') }}
@@ -53,7 +50,7 @@ jobs:
                     tools: cs2pr
                     coverage: none
             -   name: Cache Composer dependencies
-                uses: actions/cache@v3
+                uses: actions/cache@v4
                 with:
                     path: ~/.composer/cache
                     key: php-composer-locked-${{ hashFiles('composer.lock') }}

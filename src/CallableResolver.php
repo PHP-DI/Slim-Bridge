@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DI\Bridge\Slim;
 
@@ -12,9 +12,7 @@ use Slim\Interfaces\AdvancedCallableResolverInterface;
  */
 class CallableResolver implements AdvancedCallableResolverInterface
 {
-    /**
-     * @var \Invoker\CallableResolver
-     */
+    /** @var \Invoker\CallableResolver */
     private $callableResolver;
 
     public function __construct(\Invoker\CallableResolver $callableResolver)
